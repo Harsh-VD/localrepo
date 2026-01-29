@@ -6,12 +6,60 @@
 }
 
 
-body {
-  background: radial-gradient(circle at top, var(--bg-secondary), var(--bg-main));
-  color: #fff;
-  min-height: 100vh;
-  padding: 20px;
+:root {
+  --bg-main: #0f172a;
+  --bg-secondary: #1f2933;
+  --bar-start: #60a5fa;
+  --bar-end: #2563eb;
+  --active-start: #facc15;
+  --active-end: #eab308;
+  --sorted-start: #4ade80;
+  --sorted-end: #16a34a;
 }
+
+/* THEMES */
+body.neon {
+  --bg-main: #0f0c29;
+  --bg-secondary: #302b63;
+  --bar-start: #00f5ff;
+  --bar-end: #ff00c8;
+}
+
+body.sunset {
+  --bg-main: #2c061f;
+  --bg-secondary: #ff6f3c;
+  --bar-start: #ff9a3c;
+  --bar-end: #ff165d;
+}
+
+body.ocean {
+  --bg-main: #021024;
+  --bg-secondary: #052659;
+  --bar-start: #00c9ff;
+  --bar-end: #92fe9d;
+}
+
+body.forest {
+  --bg-main: #0b3d2e;
+  --bg-secondary: #14532d;
+  --bar-start: #22c55e;
+  --bar-end: #4ade80;
+}
+
+body.candy {
+  --bg-main: #3b0764;
+  --bg-secondary: #ec4899;
+  --bar-start: #f472b6;
+  --bar-end: #a855f7;
+}
+
+body.mono {
+  --bg-main: #0a0a0a;
+  --bg-secondary: #222;
+  --bar-start: #aaa;
+  --bar-end: #fff;
+}
+
 
 
 header {
