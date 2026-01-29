@@ -45,6 +45,20 @@ function generateArray() {
 
 generateArray();
 
+const complexity = {
+    bubble: { time: "O(n²)", space: "O(1)" },
+    selection: { time: "O(n²)", space: "O(1)" },
+    insertion: { time: "O(n²)", space: "O(1)" },
+    merge: { time: "O(n log n)", space: "O(n)" },
+    heap: { time: "O(n log n)", space: "O(1)" },
+    quick: { time: "O(n log n)", space: "O(log n)" }
+};
+
+function updateComplexity(algo) {
+    document.getElementById("time").innerText = complexity[algo].time;
+    document.getElementById("space").innerText = complexity[algo].space;
+}
+
 // ---------- Sorting Algorithms ----------
 
 async function bubbleSort() {
@@ -134,19 +148,96 @@ async function partition(low, high) {
     return i + 1;
 }
 
+async function mergeSort(l = 0, r = array.length - 1) {
+    if (l >= r) return;
+
+    const mid = Math.floor((l + r) / 2);
+    await mergeSort(l, mid);
+    await mergeSort(mid + 1, r);
+    await merge(l, mid, r);
+}
+
+async function merge(l, m, r) {
+    let left = array.slice(l, m + 1);
+    let right = array.slice(m + 1, r + 1);
+
+    let i = 0, j = 0, k = l;
+
+    while (i < left.length && j < right.length) {
+        bars[k].classList.add("active");
+        await sleep();
+
+        if (left[i] <= right[j]) {
+            array[k] = left[i++];
+        } else {
+            array[k] = right[j++];
+        }
+
+        bars[k].style.height = `${array[k]}px`;
+        bars[k].classList.remove("active");
+        k++;
+    }
+
+    while (i < left.length) {
+        array[k] = left[i++];
+        bars[k].style.height = `${array[k]}px`;
+        await sleep();
+        k++;
+    }
+
+    while (j < right.length) {
+        array[k] = right[j++];
+        bars[k].style.height = `${array[k]}px`;
+        await sleep();
+        k++;
+    }
+}
+
+async function heapSort() {
+    let n = array.length;
+
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--)
+        await heapify(n, i);
+
+    for (let i = n - 1; i > 0; i--) {
+        swap(0, i);
+        bars[i].classList.add("sorted");
+        await heapify(i, 0);
+    }
+}
+
+async function heapify(n, i) {
+    let largest = i;
+    let l = 2 * i + 1;
+    let r = 2 * i + 2;
+
+    if (l < n && array[l] > array[largest]) largest = l;
+    if (r < n && array[r] > array[largest]) largest = r;
+
+    if (largest !== i) {
+        swap(i, largest);
+        await sleep();
+        await heapify(n, largest);
+    }
+}
+
+
 // ---------- Algorithm Map ----------
 
 const algorithms = {
     bubble: bubbleSort,
     selection: selectionSort,
     insertion: insertionSort,
-    quick: quickSort
+    quick: quickSort,
+    merge = mergeSort,
+    heap = heapSort
 };
 
 // ---------- Start Sorting ----------
 
 async function startSort() {
     disableControls(true);
+    updateComplexity(algoSelect.value);
     await algorithms[algoSelect.value]();
     disableControls(false);
 }
