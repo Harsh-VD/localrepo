@@ -1,1 +1,37 @@
-<p>This is a new repo.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>DSA Sorting Visualizer</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+    <h1>Sorting Algorithm Visualizer</h1>
+</header>
+
+<div class="controls">
+    <button onclick="generateArray()">Generate Array</button>
+
+    <select id="algorithm">
+        <option value="bubble">Bubble Sort</option>
+        <option value="selection">Selection Sort</option>
+        <option value="insertion">Insertion Sort</option>
+        <option value="quick">Quick Sort</option>
+    </select>
+
+    <input type="range" id="size" min="10" max="100" value="40" />
+    <span>Array Size</span>
+
+    <input type="range" id="speed" min="1" max="100" value="40" />
+    <span>Speed</span>
+
+    <button onclick="startSort()">Sort</button>
+</div>
+
+<div id="array-container"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
