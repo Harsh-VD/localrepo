@@ -67,7 +67,7 @@ function updateBars(activeIndices = [], pivotIndex = null, swapIndices = []) {
 
   bars.forEach((bar, i) => {
     bar.style.height = `${array[i]}px`;
-    bar.classList.remove("active", "pivot", "swap");
+    bar.classList.remove("active", "swap", "pivot");
 
     if (activeIndices.includes(i)) bar.classList.add("active");
     if (swapIndices.includes(i)) bar.classList.add("swap");
@@ -113,7 +113,7 @@ async function insertionSort() {
       await sleep(delay);
 
       array[j + 1] = array[j];
-      updateBars([j, j + 1], null, [j, j + 1]);
+      updateBars([], null, [j, j + 1]);
       await sleep(delay);
       j--;
     }
@@ -216,6 +216,7 @@ async function merge(left, mid, right) {
     updateBars([k - 1]);
     await sleep(delay);
   }
+
   for (let t = left; t <= right; t++) document.querySelectorAll(".bar")[t].classList.add("sorted");
 }
 
