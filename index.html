@@ -2,26 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>DSA Sorting Visualizer</title>
+
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="neon">
 
+  <!-- HEADER -->
   <header>
     <h1>🚀 DSA Sorting Visualizer</h1>
-    <p>Watch algorithms come alive</p>
+    <p>Visualize sorting algorithms in real-time</p>
   </header>
 
+  <!-- CONTROLS -->
   <div class="controls">
-    <select id="theme">
-      <option value="neon">🌈 Neon</option>
-      <option value="sunset">🌅 Sunset</option>
-      <option value="ocean">🌊 Ocean</option>
-      <option value="forest">🌲 Forest</option>
-      <option value="candy">🍭 Candy</option>
-      <option value="mono">🖤 Monochrome</option>
-    </select>
 
+    <!-- Algorithm Selector -->
     <select id="algorithm">
       <option value="bubble">Bubble Sort</option>
       <option value="insertion">Insertion Sort</option>
@@ -32,18 +30,35 @@
       <option value="radix">Radix Sort</option>
     </select>
 
+    <!-- Theme Selector -->
+    <select id="theme">
+      <option value="neon">🌈 Neon</option>
+      <option value="sunset">🌅 Sunset</option>
+      <option value="ocean">🌊 Ocean</option>
+      <option value="forest">🌲 Forest</option>
+      <option value="candy">🍭 Candy</option>
+      <option value="mono">🖤 Monochrome</option>
+    </select>
+
+    <!-- Array Size -->
     <label>Size</label>
-    <input type="range" min="10" max="100" value="40" id="size">
+    <input type="range" id="size" min="10" max="100" value="40">
 
+    <!-- Speed -->
     <label>Speed</label>
-    <input type="range" min="1" max="100" value="30" id="speed">
+    <input type="range" id="speed" min="1" max="100" value="30">
 
-    <button id="generate">Generate</button>
+    <!-- Buttons -->
+    <button id="generate">Generate Array</button>
     <button id="sort">Sort</button>
+
   </div>
 
+  <!-- VISUALIZER -->
   <div id="array-container"></div>
 
+  <!-- JS -->
   <script src="script.js"></script>
+
 </body>
 </html>
