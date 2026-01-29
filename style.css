@@ -172,11 +172,30 @@ header p {
 /* ================================
    BARS
 ================================ */
+/* LABEL ABOVE BAR */
+.bar-label {
+  position: absolute;
+  top: -18px;
+  font-size: 0.7rem;
+  text-align: center;
+  width: 100%;
+  color: #fff;
+}
+
 .bar {
   flex: 1;
   border-radius: 6px 6px 0 0;
   background: linear-gradient(180deg, var(--bar-start), var(--bar-end));
   transition: height 0.2s ease, background 0.3s ease;
+}
+
+/* ADDITIONAL COLORS */
+.bar.pivot {
+  background: linear-gradient(180deg, #ff7f50, #ff4500);
+}
+
+.bar.swap {
+  background: linear-gradient(180deg, #ef4444, #b91c1c);
 }
 
 /* ACTIVE BAR */
