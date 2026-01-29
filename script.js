@@ -213,3 +213,13 @@ document.getElementById("sort").onclick = async () => {
 };
 
 generateArray();
+
+const themeSelect = document.getElementById("theme");
+
+themeSelect.addEventListener("change", () => {
+  document.body.className = themeSelect.value;
+});
+
+// Default theme
+document.body.className = "neon";
+
