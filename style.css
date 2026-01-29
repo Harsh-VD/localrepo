@@ -1,23 +1,38 @@
+/* ================================
+   GLOBAL RESET
+================================ */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Segoe UI", system-ui, sans-serif;
 }
 
-
+/* ================================
+   THEME VARIABLES (DEFAULT)
+================================ */
 :root {
   --bg-main: #0f172a;
   --bg-secondary: #1f2933;
+
   --bar-start: #60a5fa;
   --bar-end: #2563eb;
+
   --active-start: #facc15;
   --active-end: #eab308;
+
   --sorted-start: #4ade80;
   --sorted-end: #16a34a;
+
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
 }
 
-/* THEMES */
+/* ================================
+   THEMES
+================================ */
+
+/* 🌈 NEON */
 body.neon {
   --bg-main: #0f0c29;
   --bg-secondary: #302b63;
@@ -25,6 +40,7 @@ body.neon {
   --bar-end: #ff00c8;
 }
 
+/* 🌅 SUNSET */
 body.sunset {
   --bg-main: #2c061f;
   --bg-secondary: #ff6f3c;
@@ -32,6 +48,7 @@ body.sunset {
   --bar-end: #ff165d;
 }
 
+/* 🌊 OCEAN */
 body.ocean {
   --bg-main: #021024;
   --bg-secondary: #052659;
@@ -39,6 +56,7 @@ body.ocean {
   --bar-end: #92fe9d;
 }
 
+/* 🌲 FOREST */
 body.forest {
   --bg-main: #0b3d2e;
   --bg-secondary: #14532d;
@@ -46,6 +64,7 @@ body.forest {
   --bar-end: #4ade80;
 }
 
+/* 🍭 CANDY */
 body.candy {
   --bg-main: #3b0764;
   --bg-secondary: #ec4899;
@@ -53,6 +72,7 @@ body.candy {
   --bar-end: #a855f7;
 }
 
+/* 🖤 MONOCHROME */
 body.mono {
   --bg-main: #0a0a0a;
   --bg-secondary: #222;
@@ -60,63 +80,127 @@ body.mono {
   --bar-end: #fff;
 }
 
+/* ================================
+   BODY
+================================ */
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, var(--bg-secondary), var(--bg-main));
+  color: #ffffff;
+  padding: 20px;
+  transition: background 0.4s ease;
+}
 
-
+/* ================================
+   HEADER
+================================ */
 header {
   text-align: center;
   margin-bottom: 20px;
 }
 
 header h1 {
-  font-size: 2.5rem;
+  font-size: 2.6rem;
+  margin-bottom: 6px;
 }
 
+header p {
+  opacity: 0.85;
+  font-size: 1rem;
+}
+
+/* ================================
+   CONTROLS (GLASSMORPHISM)
+================================ */
 .controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
   justify-content: center;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-  padding: 15px;
-  border-radius: 12px;
+  gap: 12px;
+  padding: 16px;
   margin-bottom: 20px;
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
 }
 
 .controls select,
 .controls input,
 .controls button {
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
+  outline: none;
+  font-size: 0.95rem;
 }
 
+.controls label {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* BUTTONS */
 .controls button {
   cursor: pointer;
+  color: #fff;
+  font-weight: 600;
   background: linear-gradient(135deg, #38bdf8, #6366f1);
-  color: white;
-  font-weight: bold;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.controls button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* ================================
+   ARRAY CONTAINER
+================================ */
 #array-container {
+  height: 420px;
   display: flex;
   align-items: flex-end;
-  height: 400px;
-  gap: 2px;
+  gap: 3px;
   padding: 10px;
 }
 
+/* ================================
+   BARS
+================================ */
 .bar {
   flex: 1;
+  border-radius: 6px 6px 0 0;
   background: linear-gradient(180deg, var(--bar-start), var(--bar-end));
-  border-radius: 4px 4px 0 0;
   transition: height 0.2s ease, background 0.3s ease;
 }
 
+/* ACTIVE BAR */
 .bar.active {
   background: linear-gradient(180deg, var(--active-start), var(--active-end));
 }
 
+/* SORTED BAR */
 .bar.sorted {
   background: linear-gradient(180deg, var(--sorted-start), var(--sorted-end));
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  #array-container {
+    height: 300px;
+  }
+
+  header h1 {
+    font-size: 2rem;
+  }
+
+  .controls {
+    gap: 8px;
+  }
 }
