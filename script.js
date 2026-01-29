@@ -1,18 +1,47 @@
+/* ================================
+   DOM ELEMENTS
+================================ */
 const container = document.getElementById("array-container");
 const sizeSlider = document.getElementById("size");
 const speedSlider = document.getElementById("speed");
 const algoSelect = document.getElementById("algorithm");
+const generateBtn = document.getElementById("generate");
+const sortBtn = document.getElementById("sort");
+const themeSelect = document.getElementById("theme");
 
+/* ================================
+   GLOBAL STATE
+================================ */
 let array = [];
 let delay = 100;
+let isSorting = false;
 
+/* ================================
+   UTILITIES
+================================ */
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function disableControls(disabled) {
+  document.querySelectorAll("select, input, button").forEach(el => {
+    el.disabled = disabled;
+  });
+}
+
+function updateDelay() {
+  delay = 200 - speedSlider.value * 1.8;
+}
+
+/* ================================
+   ARRAY GENERATION
+================================ */
 function generateArray() {
-  container.innerHTML = "";
+  if (isSorting) return;
+
   array = [];
+  container.innerHTML = "";
+
   const size = sizeSlider.value;
 
   for (let i = 0; i < size; i++) {
@@ -27,15 +56,20 @@ function generateArray() {
 }
 
 function updateBars() {
-  document.querySelectorAll(".bar").forEach((bar, i) => {
+  const bars = document.querySelectorAll(".bar");
+  bars.forEach((bar, i) => {
     bar.style.height = `${array[i]}px`;
   });
 }
 
-/* ---------------- SORTING ALGORITHMS ---------------- */
+/* ================================
+   SORTING ALGORITHMS
+================================ */
 
+/* BUBBLE SORT */
 async function bubbleSort() {
   const bars = document.querySelectorAll(".bar");
+
   for (let i = 0; i < array.length; i++) {
     for (let j = 0; j < array.length - i - 1; j++) {
       bars[j].classList.add("active");
@@ -54,8 +88,8 @@ async function bubbleSort() {
   }
 }
 
+/* INSERTION SORT */
 async function insertionSort() {
-  const bars = document.querySelectorAll(".bar");
   for (let i = 1; i < array.length; i++) {
     let key = array[i];
     let j = i - 1;
@@ -67,32 +101,37 @@ async function insertionSort() {
       await sleep(delay);
     }
     array[j + 1] = key;
+    updateBars();
+    await sleep(delay);
   }
 }
 
+/* SELECTION SORT */
 async function selectionSort() {
-  const bars = document.querySelectorAll(".bar");
   for (let i = 0; i < array.length; i++) {
     let min = i;
+
     for (let j = i + 1; j < array.length; j++) {
       if (array[j] < array[min]) min = j;
       await sleep(delay);
     }
+
     [array[i], array[min]] = [array[min], array[i]];
     updateBars();
   }
 }
 
+/* QUICK SORT */
 async function quickSort(low = 0, high = array.length - 1) {
   if (low < high) {
-    let pi = await partition(low, high);
+    const pi = await partition(low, high);
     await quickSort(low, pi - 1);
     await quickSort(pi + 1, high);
   }
 }
 
 async function partition(low, high) {
-  let pivot = array[high];
+  const pivot = array[high];
   let i = low - 1;
 
   for (let j = low; j < high; j++) {
@@ -103,43 +142,55 @@ async function partition(low, high) {
       await sleep(delay);
     }
   }
+
   [array[i + 1], array[high]] = [array[high], array[i + 1]];
   updateBars();
+  await sleep(delay);
   return i + 1;
 }
 
-async function mergeSort(l = 0, r = array.length - 1) {
-  if (l >= r) return;
-  const m = Math.floor((l + r) / 2);
-  await mergeSort(l, m);
-  await mergeSort(m + 1, r);
-  await merge(l, m, r);
+/* MERGE SORT */
+async function mergeSort(left = 0, right = array.length - 1) {
+  if (left >= right) return;
+
+  const mid = Math.floor((left + right) / 2);
+  await mergeSort(left, mid);
+  await mergeSort(mid + 1, right);
+  await merge(left, mid, right);
 }
 
-async function merge(l, m, r) {
-  const left = array.slice(l, m + 1);
-  const right = array.slice(m + 1, r + 1);
+async function merge(left, mid, right) {
+  const leftArr = array.slice(left, mid + 1);
+  const rightArr = array.slice(mid + 1, right + 1);
 
-  let i = 0, j = 0, k = l;
+  let i = 0, j = 0, k = left;
 
-  while (i < left.length && j < right.length) {
-    array[k++] = left[i] < right[j] ? left[i++] : right[j++];
+  while (i < leftArr.length && j < rightArr.length) {
+    array[k++] = leftArr[i] <= rightArr[j] ? leftArr[i++] : rightArr[j++];
     updateBars();
     await sleep(delay);
   }
 
-  while (i < left.length) {
-    array[k++] = left[i++];
+  while (i < leftArr.length) {
+    array[k++] = leftArr[i++];
+    updateBars();
+    await sleep(delay);
+  }
+
+  while (j < rightArr.length) {
+    array[k++] = rightArr[j++];
     updateBars();
     await sleep(delay);
   }
 }
 
+/* HEAP SORT */
 async function heapSort() {
   const n = array.length;
 
-  for (let i = Math.floor(n / 2) - 1; i >= 0; i--)
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
     await heapify(n, i);
+  }
 
   for (let i = n - 1; i > 0; i--) {
     [array[0], array[i]] = [array[i], array[0]];
@@ -151,11 +202,11 @@ async function heapSort() {
 
 async function heapify(n, i) {
   let largest = i;
-  let l = 2 * i + 1;
-  let r = 2 * i + 2;
+  const left = 2 * i + 1;
+  const right = 2 * i + 2;
 
-  if (l < n && array[l] > array[largest]) largest = l;
-  if (r < n && array[r] > array[largest]) largest = r;
+  if (left < n && array[left] > array[largest]) largest = left;
+  if (right < n && array[right] > array[largest]) largest = right;
 
   if (largest !== i) {
     [array[i], array[largest]] = [array[largest], array[i]];
@@ -165,8 +216,10 @@ async function heapify(n, i) {
   }
 }
 
+/* RADIX SORT */
 async function radixSort() {
   const max = Math.max(...array);
+
   for (let exp = 1; Math.floor(max / exp) > 0; exp *= 10) {
     await countingSort(exp);
   }
@@ -176,14 +229,16 @@ async function countingSort(exp) {
   const output = new Array(array.length).fill(0);
   const count = new Array(10).fill(0);
 
-  for (let i = 0; i < array.length; i++)
+  for (let i = 0; i < array.length; i++) {
     count[Math.floor(array[i] / exp) % 10]++;
+  }
 
-  for (let i = 1; i < 10; i++)
+  for (let i = 1; i < 10; i++) {
     count[i] += count[i - 1];
+  }
 
   for (let i = array.length - 1; i >= 0; i--) {
-    let idx = Math.floor(array[i] / exp) % 10;
+    const idx = Math.floor(array[i] / exp) % 10;
     output[--count[idx]] = array[i];
   }
 
@@ -194,12 +249,17 @@ async function countingSort(exp) {
   }
 }
 
-/* ---------------- EVENTS ---------------- */
+/* ================================
+   EVENT HANDLERS
+================================ */
+generateBtn.addEventListener("click", generateArray);
 
-document.getElementById("generate").onclick = generateArray;
+sortBtn.addEventListener("click", async () => {
+  if (isSorting) return;
 
-document.getElementById("sort").onclick = async () => {
-  delay = 200 - speedSlider.value * 2;
+  isSorting = true;
+  disableControls(true);
+  updateDelay();
 
   switch (algoSelect.value) {
     case "bubble": await bubbleSort(); break;
@@ -210,16 +270,21 @@ document.getElementById("sort").onclick = async () => {
     case "heap": await heapSort(); break;
     case "radix": await radixSort(); break;
   }
-};
 
-generateArray();
+  isSorting = false;
+  disableControls(false);
+});
 
-const themeSelect = document.getElementById("theme");
+sizeSlider.addEventListener("input", generateArray);
+
+speedSlider.addEventListener("input", updateDelay);
 
 themeSelect.addEventListener("change", () => {
   document.body.className = themeSelect.value;
 });
 
-// Default theme
+/* ================================
+   INIT
+================================ */
 document.body.className = "neon";
-
+generateArray();
